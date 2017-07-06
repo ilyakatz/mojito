@@ -249,3 +249,30 @@ function removeAds(){
     observer.observe(target, { childList: true, subtree: true });
 
 })();
+
+a = "%7B%22query%22%3A%22%22%2C%22offset%22%3A0%2C%22typeFilter%22%3A%22cash%22%2C%22typeSort%22%3A8%2C%22startDate%22%3A%2206%2F01%2F2017%22%2C%22endDate%22%3A%2206%2F30%2F2017%22%7D"
+//a = '%7B%22accountId%22%3A0%2C%22query%22%3A%22tag%3A%5C%22Joint%5C%22%22%2C%22offset%22%3A0%7D'
+un = unescape(a)
+hash = JSON.parse(un)
+
+hash = {
+  query: 'tag:"Joint"',
+  offset: 0,
+  typeFilter: 'cash',
+  typeSort: 8,
+  startDate: '06/01/2017',
+  endDate: '06/30/2017'
+}
+//hash.query='tag:"Joint"'
+//hash.query='tag:"Reimbursable"'
+hash.query='tag:"Reimbursable", tag:"Joint"' // Tag1 or Tag2
+//hash.query='alaska, tag:Reimbursable'
+//hash.query='description:Alaska Air, tag:Reimbursable' //Exact match
+
+
+
+json = JSON.stringify(hash)
+res = escape(json)
+a_again = res.replace(/\//g,"%2F")
+
+a == a_again
