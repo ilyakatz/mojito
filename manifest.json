@@ -7,9 +7,8 @@
   "short_name":"Mojito",
   "description": "Customize Mint timeout, account sort order,  page layout, transaction filtering and more...",
   "version": "1.56",
-  "options_page": "options.html",
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-  "content_scripts": [ 
+  "content_scripts": [
   {
       "matches": ["*://mint.intuit.com/*","*://*.mint.com/*"],
 	  "css":["css/mojito.css", "css/print.css", "css/pikaday.css"],

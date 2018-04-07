@@ -48,14 +48,16 @@ function sortBalances(sortOrder, sortList) {
   if (isNaN(sortOrder)) {
     OPTIONS[this.parentElement.id] = sortType;
   }
-  chrome.storage.sync.set({ options: OPTIONS });
+  chrome.storage.sync.set({
+    options: OPTIONS
+  });
   var arr = [];
   var parentNode = sortList || this.nextElementSibling; //Get UL
   var accounts = parentNode.querySelectorAll("li.accounts-data-li");
-  accounts.forEach(function(n) {
+  accounts.forEach(function (n) {
     arr.push(n);
   });
-  arr.sort(function(a, b) {
+  arr.sort(function (a, b) {
     var result, keyA, keyB;
     if (sortType != 0) {
       //locate the HTML element that holds the balance for an account
@@ -87,16 +89,16 @@ function sortBalances(sortOrder, sortList) {
 function bindHandlers() {
   //Add button and default to descending
   var html = '<a class="mojito"> </a>';
-  document.querySelectorAll("div.account-header-wrapper").forEach(function(el) {
+  document.querySelectorAll("div.account-header-wrapper").forEach(function (el) {
     el.insertAdjacentHTML("afterend", html);
   });
   //Attach event handlers and apply initial sort;
-  document.querySelectorAll("a.mojito").forEach(function(el) {
+  document.querySelectorAll("a.mojito").forEach(function (el) {
     el.addEventListener("click", sortBalances);
     var sortOrder =
-      OPTIONS[el.parentElement.id] != undefined
-        ? OPTIONS[el.parentElement.id]
-        : 1;
+      OPTIONS[el.parentElement.id] != undefined ?
+      OPTIONS[el.parentElement.id] :
+      1;
     sortBalances(sortOrder, el.nextElementSibling);
     updateIcon(el, sortOrder);
   });
@@ -104,7 +106,7 @@ function bindHandlers() {
 
 function setupRefreshObserver() {
   var container = document.querySelector("div.module-content.accounts");
-  var refreshObserver = new window.MutationObserver(function(mutations) {
+  var refreshObserver = new window.MutationObserver(function (mutations) {
     if (
       container.style.overflow == "hidden" ||
       (mutations.length == 1 && mutations[0].attributeName == "id")
@@ -120,7 +122,7 @@ function setupRefreshObserver() {
       removeAds();
       bindHandlers();
     } else {
-      document.querySelectorAll("a.mojito + ul").forEach(function(el) {
+      document.querySelectorAll("a.mojito + ul").forEach(function (el) {
         sortBalances(getSortOrder(el.previousElementSibling), el);
       });
     }
@@ -132,6 +134,7 @@ function setupRefreshObserver() {
     subtree: false
   });
 }
+
 function hideAccounts() {
   //Hide Accounts with zero balances
   var accounts = [];
@@ -168,7 +171,7 @@ function hideAccounts() {
     );
   }
 
-  accounts.forEach(function(n) {
+  accounts.forEach(function (n) {
     if (!n.classList.contains("error")) {
       var bal = n.querySelector("span.balance").textContent;
       if (bal == "$0.00") {
@@ -218,7 +221,7 @@ function fixStyles() {
 function hideModules() {
   //Hide unwanted modules
   if (OPTIONS.layout) {
-    OPTIONS.layout.forEach(function(id) {
+    OPTIONS.layout.forEach(function (id) {
       var el = document.getElementById(id);
       if (el) {
         el.parentElement.classList.add("hide");
@@ -239,30 +242,33 @@ function setupModules() {
 
 function removeAds() {
   var adv = document.querySelectorAll("a.accounts-adv");
-  adv.forEach(function(el) {
+  adv.forEach(function (el) {
     el.parentNode.removeChild(el);
   });
 }
 
 //Code to dynamically fix links with wrong category URL
-(function() {
+(function () {
   if (window.location.href.indexOf("planning.event") == -1) {
     return;
   }
   var target = document.getElementById("body-mint");
-  var observer = new window.MutationObserver(function(mutations) {
+  var observer = new window.MutationObserver(function (mutations) {
     var everythingElseList = $("spendingEE-list");
     if (everythingElseList != undefined) {
       var links = document.querySelectorAll("a[href*=category\\=]");
-      links.forEach(function(node) {
+      links.forEach(function (node) {
         node.href = node.href.replace("category=", "category");
       });
     }
   });
-  observer.observe(target, { childList: true, subtree: true });
+  observer.observe(target, {
+    childList: true,
+    subtree: true
+  });
 })();
 
-(function() {
+(function () {
   if (window.location.href.indexOf("overview.event") == -1) {
     return;
   }
@@ -271,7 +277,7 @@ function removeAds() {
   var _gaq = _gaq || [];
   _gaq.push(["_setAccount", "UA-49104711-2"]);
   _gaq.push(["_trackPageview"]);
-  (function() {
+  (function () {
     var ga = document.createElement("script");
     ga.type = "text/javascript";
     ga.async = true;
@@ -281,7 +287,7 @@ function removeAds() {
   })();
 
   var target = document.getElementById("body-mint");
-  var observer = new window.MutationObserver(function(mutations) {
+  var observer = new window.MutationObserver(function (mutations) {
     if (!observer.hasModules) {
       var moduleAlert = $("module-alert");
       var moduleTransactions = $("module-transactions");
@@ -295,7 +301,10 @@ function removeAds() {
       setupRefreshObserver();
     }
   });
-  observer.observe(target, { childList: true, subtree: true });
+  observer.observe(target, {
+    childList: true,
+    subtree: true
+  });
 })();
 
 // a =
@@ -310,15 +319,15 @@ function removeAds() {
 // a =
 //   "%7B%22offset%22%3A0%2C%22typeFilter%22%3A%22cash%22%2C%22typeSort%22%3A8%2C%22startDate%22%3A%2206%2F01%2F2017%22%2C%22endDate%22%3A%2206%2F30%2F2017%22%2C%22accountId%22%3A%225632483%22%2C%22query%22%3A%22category%3D%3A%20Groceries%22%7D";
 //
-// hash = {
-//   //  query: 'tag:"Joint"',
-//   offset: 0,
-//   typeFilter: "cash",
-//   typeSort: 8,
-//   startDate: "06/01/2017",
-//   endDate: "06/30/2017",
-//   accountId: "5632483" //Chase
-// };
+hash = {
+  query: 'tag:"Joint"',
+  offset: 0,
+  typeFilter: "cash",
+  typeSort: 8,
+  startDate: "1/01/2018",
+  endDate: "1/31/2018",
+  accountId: "6339553" //Chase
+};
 // //hash.query='tag:"Joint"'
 // //hash.query='tag:"Reimbursable"'
 // //hash.query = 'tag:"Reimbursable", tag:"Joint"'; // Tag1 or Tag2
@@ -329,5 +338,6 @@ function removeAds() {
 // json = JSON.stringify(hash);
 // res = escape(json);
 // a_again = res.replace(/\//g, "%2F");
+// link = "https://mint.intuit.com/transaction.event#location:" + a_again
 //
 // a == a_again;
